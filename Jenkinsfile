@@ -1,23 +1,35 @@
-#!groovy
+pipeline {
+    agent any
+    environment {
+        AWS_ACCOUNT_ID='361703069140'
+        AWS_DEFAULT_REGION='ap-south-1'
+        IMAGE_REPO_NAME='mavenwebapp'
+        REPOSITORY_URI = '361703069140.dkr.ecr.ap-south-1.amazonaws.com/mavenwebapp'
+        AWS_ACCESS_KEY_ID = "AKIAVINZO2XKOQAF6G6G"
+       AWS_SECRET_ACCESS_KEY = "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"
+  }
 
-node {
-	   
-	stage('Checkout'){
-
-          checkout scm
-       }
-
-       stage('BuildArtifact'){
-
-         // bat 'mvn install'
-	       
-	       sh 'mvn clean'
-       }
-	   
-      stage('Sonar') {
-                    //add stage sonar
-                   // sh 'mvn sonar:sonar'
-                }
-	
-       
+    stages {
+        stage('code fetch') {
+            steps {
+                git branch: 'main', url: 'https://github.com/vjtechie/newtestrepo.git'
+            }
+        }
+        stage('Build') {
+            steps {
+                sh "mvn clean package"
+            }
+        }
+         
+         stage('push iamge ') {
+            steps {
+                sh "aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 361703069140.dkr.ecr.ap-south-1.amazonaws.com"
+                sh "docker build -t mavenwebapp ."
+                sh "docker tag mavenwebapp:latest 361703069140.dkr.ecr.ap-south-1.amazonaws.com/mavenwebapp:latest"
+                sh "docker push 361703069140.dkr.ecr.ap-south-1.amazonaws.com/mavenwebapp:latest"
+            }
+        }
+        
+    }
 }
+   
