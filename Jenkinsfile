@@ -23,10 +23,10 @@ pipeline {
          
          stage('push iamge ') {
             steps {
-                sh "aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 361703069140.dkr.ecr.ap-south-1.amazonaws.com"
+                sh "aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin xxxxxxxxxxx.dkr.ecr.ap-south-1.amazonaws.com"
                 sh "docker build -t mavenwebapp ."
-                sh "docker tag mavenwebapp:latest 361703069140.dkr.ecr.ap-south-1.amazonaws.com/mavenwebapp:latest"
-                sh "docker push 361703069140.dkr.ecr.ap-south-1.amazonaws.com/mavenwebapp:latest"
+                sh "docker tag mavenwebapp:latest xxxxxxxxx.dkr.ecr.ap-south-1.amazonaws.com/mavenwebapp:latest"
+                sh "docker push xxxxxxxxxx.dkr.ecr.ap-south-1.amazonaws.com/mavenwebapp:latest"
             }
         }
         
